@@ -2,6 +2,7 @@ git submodule update --init --recursive
 
 cp wolfboot.config src/libs/wolfboot
 cd src/libs/wolfboot
+patch -p1 < ../../../../wolfboot-spi-pinout.diff
 make wolfboot.bin
 cd ../../../..
 
