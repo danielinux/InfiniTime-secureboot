@@ -7,3 +7,6 @@
 [submodule "src/libs/arduinoFFT"]
 	path = src/libs/arduinoFFT
 	url = https://github.com/kosme/arduinoFFT.git
+[submodule "src/libs/wolfboot"]
+	path = src/libs/wolfboot
+	url = https://github.com/wolfssl/wolfboot.git

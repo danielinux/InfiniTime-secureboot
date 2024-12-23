@@ -697,6 +697,7 @@ include_directories(SYSTEM
         libs/mynewt-nimble/nimble/host/services/gatt/include
         libs/mynewt-nimble/nimble/host/util/include
         libs/mynewt-nimble/nimble/host/store/ram/include
+        libs/wolfboot/include
 
         "${NRF5_SDK_PATH}/components/drivers_nrf/nrf_soc_nosd"
         "${NRF5_SDK_PATH}/components"

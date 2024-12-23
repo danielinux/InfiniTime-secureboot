@@ -1,0 +1,19 @@
+git submodule update --init --recursive
+
+cp wolfboot.config src/libs/wolfboot
+cd src/libs/wolfboot
+make wolfboot.bin
+cd ../../../..
+
+
+mkdir build
+cd build
+cmake .. -DNRF5_SDK_PATH=/home/dan/src/nRF5_SDK_15.3.0_59ac345 -DARM_NONE_EABI_TOOLCHAIN_PATH=/opt/toolchains/gcc-arm-none-eabi-10.3-2021.10 
+make -j
+IMAGE_HEADER_SIZE=1024 ../src/libs/wolfboot/tools/keytools/sign --ecc256 --sha256 src/pinetime-mcuboot-app-1.15.0.bin ../src/libs/wolfboot/wolfboot_signing_private_key.der 115
+
+IMAGE_HEADER_SIZE=1024 ../src/libs/wolfboot/tools/keytools/sign --ecc256 --sha256 src/pinetime-mcuboot-app-1.15.0.bin ../src/libs/wolfboot/wolfboot_signing_private_key.der 116
+
+adafruit-nrfutil dfu genpkg --dev-type 0x0052 --application src/pinetime-mcuboot-app-1.15.0_v116_signed.bin dfu.zip
+
+

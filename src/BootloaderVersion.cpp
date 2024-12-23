@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <cstdio>
 #include "BootloaderVersion.h"
+#include "wolfboot/version.h"
 
 using namespace Pinetime;
 
@@ -33,8 +34,7 @@ void BootloaderVersion::SetVersion(uint32_t v) {
   BootloaderVersion::version = v;
   snprintf(BootloaderVersion::versionString,
            BootloaderVersion::VERSION_STR_LEN,
-           "%ld.%ld.%ld",
-           BootloaderVersion::Major(),
-           BootloaderVersion::Minor(),
-           BootloaderVersion::Patch());
+           "%d.%d.%d", ((WOLFBOOT_VERSION & 0xFF000000) >> 24),
+            ((WOLFBOOT_VERSION & 0x00FF0000) >> 16),
+            ((WOLFBOOT_VERSION & 0x0000FFFF)));
 }

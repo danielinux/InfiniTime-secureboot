@@ -2,6 +2,8 @@
 #include <lvgl/lvgl.h>
 #include "components/ble/BleController.h"
 #include "displayapp/DisplayApp.h"
+#include "drivers/InternalFlash.h"
+#include "target.h"
 
 using namespace Pinetime::Applications::Screens;
 
@@ -81,7 +83,17 @@ void FirmwareUpdate::DisplayProgression() const {
 }
 
 void FirmwareUpdate::UpdateValidated() {
-  lv_label_set_text_static(percentLabel, "#00ff00 Image Ok!#");
+  auto update_flags = (WOLFBOOT_PARTITION_BOOT_ADDRESS + WOLFBOOT_PARTITION_SIZE - 16);
+  auto update_magic = (WOLFBOOT_PARTITION_BOOT_ADDRESS + WOLFBOOT_PARTITION_SIZE - 12);
+  const uint32_t update_updating = 0x70FFFFFF;
+  const char magic[] = "BOOT";
+  /* Erase last sector of the partition */
+  Pinetime::Drivers::InternalFlash::ErasePage(WOLFBOOT_PARTITION_BOOT_ADDRESS 
+          + WOLFBOOT_PARTITION_SIZE - WOLFBOOT_SECTOR_SIZE);
+  /* Set flags corresponding to the UPDATE partition (FLAGS_HOME=1) */
+  Pinetime::Drivers::InternalFlash::WriteWord(update_flags, update_updating);
+  Pinetime::Drivers::InternalFlash::WriteWord(update_magic, *((const uint32_t *)(magic)));
+  lv_label_set_text_static(percentLabel, "#00ff00 Update Rx Ok!#");
 }
 
 void FirmwareUpdate::UpdateError() {
